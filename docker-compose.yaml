@@ -1,0 +1,36 @@
+version: '3.9'
+volumes:
+   phpmyadmin:
+   mariadb:
+
+services:
+  alpine:
+    restart: always
+    container_name: alpine
+    build: ./alpine
+    depends_on:
+      - mariadb
+  mariadb:
+    image: mariadb:10.10.2
+    restart: always
+    volumes:
+      - mariadb:/home/rip/shared/docker/homeWork4/mysql
+    environment:
+      - MARIADB_USER=admin
+      - MARIADB_PASSWORD=q2
+      - MARIADB_ROOT_PASSWORD=q1
+      - MARIADB_DATABASE=my_mariadb
+  phpmyadmin:
+    image: phpmyadmin:5.2.1
+    restart: always
+    ports:
+      - 8090:80
+    environment:
+      - MARIADB_USER=admin
+      - MARIADB_PASSWORD=pas123
+      - MARIADB_DATABASE=my_mariadb
+      - PMA_HOST=mariadb
+    depends_on:
+      - mariadb
+
+  
